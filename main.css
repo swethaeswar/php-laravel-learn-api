@@ -1,0 +1,42 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    
+  }
+  .login-form {
+    width: 500px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+
+  .form-group label {
+    font-weight: bold;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 6px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+  }
+
+  .form-group input text{
+width: 50%;
+  }
+.submit{
+text-align: center;
+  }
+  body h2{
+  text-align: center;
+  font-size: x-large;
+
+  }
+h1{
+  text-align: center;
+  color: #e19f72 ;
+  
+}
+/*#f6ede8---*/
