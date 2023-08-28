@@ -23,13 +23,16 @@ Route::get('/user', function () {
 });
 
 Route::post('/admin/add', function (Request $request) {
-    $user = $request->input('user');
-    $pass = $request->input('pass');
+    $user = $request->input('name');
+    $pass = $request->input('password');
     $intusty = $request->input('intusty');
     $logo = $request->input('logo');
+    $role = $request->input('role');
     $location = $request->input('location');
-
-    DB::insert('insert into users (user, pass, intusty, logo, location) values (?, ?, ?, ?, ?)', [$user, $pass, $intusty, $logo, $location]);
+    if $role == null {
+        $role = 'user';
+    }
+    DB::insert('insert into users (name, password, industry, role, logo, location) values (?, ?, ?, ?, ?)', [$user, $pass, $intusty, $role, $logo, $location]);
     if ($user == null || $pass == null || $intusty == null || $logo == null || $location == null) {
         return Response::json([
             'status' => 'error',
@@ -41,11 +44,46 @@ Route::post('/admin/add', function (Request $request) {
     ]);
 });
 
-
-Route::post('/edit' function (Request $request){
+Route::post('/admin/delete', function (Request $request) {
     $id = $request->input('id');
-    $user = $request->input('user');
-    $pass = $request->input('pass');
+    DB::delete('delete from users where id = ?', [$id]);
+    return Response::json([
+        'status' => 'success',
+    ]);
+});
+
+Route::post('/login', function (Request $request) {
+    $user = $request->input('name');
+    $pass = $request->input('password');
+    $data  = DB::select('select * from users where name = ? and password = ?', [$user, $pass]);
+    if ($user == null || $pass == null) {
+        return Response::json([
+            'status' => 'error',
+            'message' => 'Please fill all the fields'
+        ]);
+    }
+    return Response::json([
+        'status' => 'success',
+        'data' => $data
+    ]);
+});
+
+
+
+
+Route::get('/admin', function () {
+    $users = DB::select('select * from users');
+    return Response::json([
+        'users' => $users
+    ]);
+});
+
+
+
+Route::post('/edit', function (Request $request){
+    $id = $request->input('id');
+    $user = $request->input('name');
+    $pass = $request->input('password');
     $intusty = $request->input('intusty');
     $logo = $request->input('logo');
     $location = $request->input('location');
@@ -55,11 +93,11 @@ Route::post('/edit' function (Request $request){
             'message' => 'Please fill all the fields'
         ]);
     }
-    DB::update('update users set user = ?, pass = ?, intusty = ?, logo = ?, location = ? where id = ?', [$user, $pass, $intusty, $logo, $location, $id]);
+    DB::update('update users set name = ?, password = ?, industry = ?, logo = ?, location = ? where id = ?', [$user, $pass, $intusty, $logo, $location, $id]);
     return Response::json([
         'status' => 'success',
     ]);
-})
+});
 
 Route::post('/user/login', function (Request $request) {
     $users = DB::select('select * from users');
