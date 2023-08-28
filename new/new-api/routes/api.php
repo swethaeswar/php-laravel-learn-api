@@ -27,12 +27,9 @@ Route::post('/admin/add', function (Request $request) {
     $pass = $request->input('password');
     $intusty = $request->input('intusty');
     $logo = $request->input('logo');
-    $role = $request->input('role');
     $location = $request->input('location');
-    if $role == null {
-        $role = 'user';
-    }
-    DB::insert('insert into users (name, password, industry, role, logo, location) values (?, ?, ?, ?, ?)', [$user, $pass, $intusty, $role, $logo, $location]);
+    $role = 'user';
+    DB::insert('insert into users (name, password, industry, role, logo, location) values (?, ?, ?, ?, ?, ?)', [$user, $pass, $intusty, $role, $logo, $location]);
     if ($user == null || $pass == null || $intusty == null || $logo == null || $location == null) {
         return Response::json([
             'status' => 'error',
@@ -60,6 +57,12 @@ Route::post('/login', function (Request $request) {
         return Response::json([
             'status' => 'error',
             'message' => 'Please fill all the fields'
+        ]);
+    }
+    if (count($data) == 0) {
+        return Response::json([
+            'status' => 'error',
+            'message' => 'Invalid username or password'
         ]);
     }
     return Response::json([
