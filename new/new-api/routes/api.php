@@ -14,11 +14,18 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-Route::get('/user', function () {
-    $user = 'John Doe';
+Route::get('/user', function (Request $request) {
+    $user = $request->input('id');
+    if ($user == null) {
+        return Response::json([
+            'status' => 'error',
+            'message' => 'Please fill all the fields'
+        ]);
+    }
+    $data  = DB::select('select * from users where name = ? and password = ?', [$user, $pass]);
     return Response::json([
-        'name' => $user,
-        'state' => 'CA'
+        'status' => 'success',
+        'data' => $data
     ]);
 });
 
