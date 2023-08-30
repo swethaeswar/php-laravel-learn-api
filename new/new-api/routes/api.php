@@ -22,7 +22,7 @@ Route::get('/user', function (Request $request) {
             'message' => 'Please fill all the fields'
         ]);
     }
-    $data  = DB::select('select * from users where name = ? and password = ?', [$user, $pass]);
+    $data  = DB::select('select * from users where id = ?', [$user]);
     return Response::json([
         'status' => 'success',
         'data' => $data
