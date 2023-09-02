@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Add Customer Information</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="css/add.css" rel="stylesheet" />
+</head>
+<body>
+  <form id="customerForm">
+    <input type="text" id="name" placeholder="Name" />
+    <input type="password" id="password" placeholder="Password" />
+    <input type="text" id="logo" placeholder="Logo URL" />
+    <input type="text" id="location" placeholder="Location" />
+    <input type="text" id="industry" placeholder="Industry" />
+    <input class="login" type="button" value="Add Customer" onclick="addCustomer()" />
+  </form>
+
+  <script>
+    function addCustomer() {
+      var name = document.getElementById("name").value;
+      var password = document.getElementById("password").value;
+      var logo = document.getElementById("logo").value;
+      var location = document.getElementById("location").value;
+      var industry = document.getElementById("industry").value;
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        "name": name,
+        "password": password,
+        "logo": logo,
+        "location": location,
+        "industry": industry
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      fetch("http://45.79.123.87:8082/api/admin/add", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          console.log(result);
+          // Clear input fields after successful submission
+          document.getElementById("name").value = "";
+          document.getElementById("password").value = "";
+          document.getElementById("logo").value = "";
+          document.getElementById("location").value = "";
+          document.getElementById("industry").value = "";
+        })
+        .catch(error => console.log('error', error));
+    }
+  </script>
+</body>
+</html>
+

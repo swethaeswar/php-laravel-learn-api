@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Login Form</title>
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="form">
+      <h1>Login</h1>
+      <div class="form-content">
+        <form>
+          <div class="form-info">
+            <h2>Login</h2>
+          </div>
+          <div class="email-w3l">
+            <span class="i1"
+              ><i class="fa fa-envelope-o" aria-hidden="true"></i
+            ></span>
+            <input
+              class="email"
+              type="user"
+              name="email"
+              placeholder="User name"
+              required=""
+            />
+          </div>
+          <div class="pass-w3l">
+            <span class="i2"
+              ><i class="fa fa-unlock" aria-hidden="true"></i
+            ></span>
+            <input
+              class="pass"
+              type="password"
+              name="password"
+              placeholder="Password"
+              required=""
+            />
+          </div>
+          <div class="form-check">
+            <div class="left">
+              <input type="checkbox" value="Remember me" />Remember me
+            </div>
+            <!-- <div class="right"> 
+					<a href="#">Forgot Password?</a>
+				</div>-->
+            <div class="clear"></div>
+          </div>
+          <div class="submit-agileits">
+            <input
+              class="login"
+              type="button"
+              value="login"
+              onclick="login()"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      function login() {
+        let username = document.querySelector(".email").value;
+        let password = document.querySelector(".pass").value;
+
+        var raw = JSON.stringify({
+          name: username,
+          password: password,
+        });
+
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+        fetch("http://45.79.123.87:8082/api/login", requestOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.status == "success") { 
+                if(result.data[0].role == "admin"){
+                    window.location.href = "admin.html";
+                    return;
+                }
+              let stringData = JSON.stringify(result.data[0]);
+              localStorage.setItem("data", stringData);
+              window.location.href = `dashboard.html?id=${result.data[0].id}`;
+            } else {
+              alert("Invalid username or password");
+            }
+          })
+          .catch((error) => console.log("error", error));
+      }
+    </script>
+  </body>
+</html>

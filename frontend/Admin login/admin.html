@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>User Data Table</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="css/admin.css" rel="stylesheet" />
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <button type="button" onclick="redirectToRegister()">Add User</button>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Logo</th>
+        <th>Location</th>
+        <th>Industry</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody class="user-table-body"></tbody>
+  </table>
+  <script>
+    function redirectToRegister() {
+      window.location.href = "add.html";
+    }
+
+    function redirectToEdit(userId) {
+      window.location.href = `edit.html?id=${userId}`;
+    }
+
+    function deleteUser(userId) {
+      var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "id": userId
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("http://45.79.123.87:8082/api/admin/delete", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error)); 
+    }
+
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    fetch("http://45.79.123.87:8082/api/admin", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        let users = result.users;
+        let userTableBody = document.querySelector(".user-table-body");
+
+        for (let i = 0; i < users.length; i++) {
+          let user = users[i];
+          let row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.username}</td>
+            <td>${user.password}</td>
+            <td><img src="${user.logo}" alt="Logo" width="50" height="50"></td>
+            <td>${user.location}</td>
+            <td>${user.industry}</td>
+            <td>
+              <button type="button" onclick="redirectToEdit(${user.id})">Edit</button>
+              <button type="button" onclick="deleteUser(${user.id})">Delete</button>
+            </td>
+          `;
+          userTableBody.appendChild(row);
+        }
+      })
+      .catch((error) => console.log("error", error));
+  </script>
+</body>
+</html>

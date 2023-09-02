@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register Form</title>
+  <link href="css/register.css" rel="stylesheet">
+</head>
+<body>
+  <div class="form">
+    <h1>Registration</h1>
+    <div class="form-content">
+      <form action="#" method="post">
+        <div class="form-info">
+          <h2>Register</h2>
+        </div>
+        <div class="form-group">
+          <label for="fname">Full Name</label>
+          <input type="text" name="username" placeholder="Enter your Full Name"><br><br>
+          
+          <label for="image">Logo image</label><br>
+          <input type="file" name="logo" id="fileToUpload" accept="image/*"><br><br>
+          
+          <label for="Industrys">Industry</label><br>
+          <select name="Industry" id="Industrys">
+            <option value="IT">Select Industry</option>
+            <option value="IT">IT</option>
+            <option value="Medical">Medical</option>
+            <option value="Banking">Banking</option>
+            <option value="Automobile">Automobile</option>
+          </select><br><br>
+          
+          <label for="countrySelect">Country</label><br>
+          <select id="countrySelect" name="country">
+            <option value="">Select a country</option>
+          </select>
+        </div>
+
+        <div class="submit-agileits">
+          <input class="login" type="submit" value="Submit">
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    // Get the select element
+    const selectElement = document.getElementById("countrySelect");
+
+    // Fetch the list of countries from the REST Countries API
+    fetch("https://restcountries.com/v3.1/all")
+      .then(response => response.json())
+      .then(data => {
+        // Loop through the data to populate the select element
+        data.forEach(country => {
+          const option = document.createElement("option");
+          option.value = country.cca2;
+          option.text = country.name.common;
+          selectElement.appendChild(option);
+        });
+      })
+      .catch(error => console.error("Error fetching countries:", error));
+
+    // You can keep your XMLHttpRequest code here, although it's better to use modern Fetch API for consistency
+  </script>
+</body>
+</html>

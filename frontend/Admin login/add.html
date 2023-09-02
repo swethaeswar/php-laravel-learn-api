@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Add Customer Information</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="css/add.css" rel="stylesheet" />
+</head>
+<body>
+  <form id="customerForm">
+    <input type="text" id="name" placeholder="Name" />
+    <input type="password" id="password" placeholder="Password" />
+    <input type="text" id="logo" placeholder="Logo URL" />
+    <select id="location">
+      <option value="" disabled selected>Select Location</option>
+      <option value="location1">Chennai</option>
+      <option value="location2">Madurai</option>
+      <option value="location3">Erode</option>
+      <option value="location4">Pudukkottai</option>
+      <option value="location5">Sivagangai</option>
+      <option value="location6">Ramanathapuram</option>
+      <!-- Add more location options as needed -->
+    </select>
+    <select id="industry">
+      <option value="" disabled selected>Select Industry</option>
+      <option value="industry1">IT</option>
+      <option value="industry2">Health care</option>
+      <option value="industry3">Agriculture</option>
+      <option value="industry4">Textile</option>
+      <option value="industry5">Banking & Insurance</option>
+      <option value="industry6">Automobile</option>
+      <!-- Add more industry options as needed -->
+    </select>
+    <input class="login" type="button" value="Add Customer" onclick="addCustomer()" />
+  </form>
+
+  <script>
+    function addCustomer() {
+      var name = document.getElementById("name").value;
+      var password = document.getElementById("password").value;
+      var logo = document.getElementById("logo").value;
+      var location = document.getElementById("location").value;
+      var industry = document.getElementById("industry").value;
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        "name": name,
+        "password": password,
+        "logo": logo,
+        "location": location,
+        "industry": industry
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      fetch("http://45.79.123.87:8082/api/admin/add", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          console.log(result);
+          // Clear input fields after successful submission
+          document.getElementById("name").value = "";
+          document.getElementById("password").value = "";
+          document.getElementById("logo").value = "";
+          document.getElementById("location").value = "";
+          document.getElementById("industry").value = "";
+        })
+        .catch(error => console.log('error', error));
+    }
+  </script>
+</body>
+</html>

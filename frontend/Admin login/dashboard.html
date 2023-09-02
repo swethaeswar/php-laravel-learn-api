@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <h2>Dashboard</h2>
+    <div>
+      <div class="username"></div>
+    </div>
+    <script>
+      let data = localStorage.getItem("data");
+      data = JSON.parse(data);
+      console.log(data);
+      document.querySelector(".username").innerText = data.username;
+    </script>
+  </body>
+</html>
